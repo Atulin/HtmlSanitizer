@@ -5,41 +5,45 @@
     <meta name="viewport" content="width=device-width">
     <title>HtmlSanitizer test</title>
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.9.1.css">
-    <script src="HtmlSanitizer.js"></script>
+    <script src="dist/index.js"></script>
 </head>
 <body>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script src="https://code.jquery.com/qunit/qunit-2.9.1.js"></script>
 
-    <script>
+    <script type="module">
+        import {HtmlSanitizer} from "./dist/HtmlSanitizer.js";
+        const sanitizer = new HtmlSanitizer();
     QUnit.test("Html Sanitizer", function( assert ) {
-		assert.equal(HtmlSanitizer.SanitizeHtml("<p>Hello world!</p><img name=createElement>"), "<p>Hello world!</p><img>");
-		assert.equal(HtmlSanitizer.SanitizeHtml("<p>Hello world!</p><img name=body>"), "<p>Hello world!</p><img>");
-        assert.equal(HtmlSanitizer.SanitizeHtml("<div> <script> Alert('xss!'); </scr" + "ipt> </div>"), "<div>  </div>");
-        assert.equal(HtmlSanitizer.SanitizeHtml("<p class='MsoNormal' style='margin-bottom:10.0pt;line-height:115%'><b>Official - SBU&nbsp;</b><o:p></o:p></p>"), "<p><b>Official - SBU&nbsp;</b></p>");
-        assert.equal(HtmlSanitizer.SanitizeHtml("<span style='color: rgb(102, 102, 102); font-size: 8px;'><i>NOTE</i></span>"), "<span style=\"color: rgb(102, 102, 102); font-size: 8px;\"><i>NOTE</i></span>");
-        assert.equal(HtmlSanitizer.SanitizeHtml("<B>Neo Anderson</B><font onclick='alert(sdfds)' style='font-family:Arial;font-size:10pt;font-weight:bold;'>Superhero</font><font style='font-family:Arial;'>555.555.5558</font><B>-</B><font style=font-family:Arial;font-size:12pt;font-weight:bold;>-</font>"), "<b>Neo Anderson</b><font style=\"font-size: 10pt; font-weight: bold;\">Superhero</font><font>555.555.5558</font><b>-</b><font style=\"font-size: 12pt; font-weight: bold;\">-</font>");
-        assert.equal(HtmlSanitizer.SanitizeHtml("<a href='javascript:alert(\"asdf\")'>blahblah</a>"), "<a>blahblah</a>");
-        assert.equal(HtmlSanitizer.SanitizeHtml("<a href='http://blah'>blahblah</a>"), "<a href=\"http://blah\">blahblah</a>");
-        assert.equal(HtmlSanitizer.SanitizeHtml("<b style='text-align:right;float:right'>blahblah</a>"), "<b style=\"text-align: right;\">blahblah</b>");
-		assert.equal(HtmlSanitizer.SanitizeHtml("<style>test</style>"), "");
-		assert.equal(HtmlSanitizer.SanitizeHtml("<style>test</style>", "style"), "<style>test</style>");
-		assert.equal(HtmlSanitizer.SanitizeHtml(`<p class="MsoNormal"><b><span onclick='blahblah' style="color:green">test</span></b><o:p></o:p></p>
+		assert.equal(sanitizer.SanitizeHtml('<p>Hello world!</p><img src="https://picsum.photos/200" name="createElement">'), '<p>Hello world!</p><img src="https://picsum.photos/200">');
+		assert.equal(sanitizer.SanitizeHtml('<p>Hello world!</p><img src="https://picsum.photos/200" name="body">'), '<p>Hello world!</p><img src="https://picsum.photos/200">');
+        assert.equal(sanitizer.SanitizeHtml('<p>Hello world!</p><img src="https://picsum.photos/200" id="createElement">'), '<p>Hello world!</p><img src="https://picsum.photos/200">');
+        assert.equal(sanitizer.SanitizeHtml('<p>Hello world!</p><img src="https://picsum.photos/200" id="body">'), '<p>Hello world!</p><img src="https://picsum.photos/200">');
+        assert.equal(sanitizer.SanitizeHtml("<div> <script> Alert('xss!'); </scr" + "ipt> </div>"), "<div>  </div>");
+        assert.equal(sanitizer.SanitizeHtml("<p class='MsoNormal' style='margin-bottom:10.0pt;line-height:115%'><b>Official - SBU&nbsp;</b><o:p></o:p></p>"), "<p><b>Official - SBU&nbsp;</b></p>");
+        assert.equal(sanitizer.SanitizeHtml("<span style='color: rgb(102, 102, 102); font-size: 8px;'><i>NOTE</i></span>"), "<span style=\"color: rgb(102, 102, 102); font-size: 8px;\"><i>NOTE</i></span>");
+        assert.equal(sanitizer.SanitizeHtml("<B>Neo Anderson</B><font onclick='alert(sdfds)' style='font-family:Arial;font-size:10pt;font-weight:bold;'>Superhero</font><font style='font-family:Arial;'>555.555.5558</font><B>-</B><font style=font-family:Arial;font-size:12pt;font-weight:bold;>-</font>"), "<b>Neo Anderson</b><font style=\"font-size: 10pt; font-weight: bold;\">Superhero</font><font>555.555.5558</font><b>-</b><font style=\"font-size: 12pt; font-weight: bold;\">-</font>");
+        assert.equal(sanitizer.SanitizeHtml("<a href='javascript:alert(\"asdf\")'>blahblah</a>"), "<a>blahblah</a>");
+        assert.equal(sanitizer.SanitizeHtml("<a href='http://blah'>blahblah</a>"), "<a href=\"http://blah\">blahblah</a>");
+        assert.equal(sanitizer.SanitizeHtml("<b style='text-align:right;float:right'>blahblah</a>"), "<b style=\"text-align: right;\">blahblah</b>");
+		assert.equal(sanitizer.SanitizeHtml("<style>test</style>"), "");
+		assert.equal(sanitizer.SanitizeHtml("<style>test</style>", "style"), "<style>test</style>");
+		assert.equal(sanitizer.SanitizeHtml(`<p class="MsoNormal"><b><span onclick='blahblah' style="color:green">test</span></b><o:p></o:p></p>
 <p class="MsoNormal"><o:p>&nbsp;</o:p></p>`), `<p><b><span style="color: green;">test</span></b></p>
 <p></p>`);
-		assert.equal(HtmlSanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>"), "");
-		assert.equal(HtmlSanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>", "mycustomtag"), "<mycustomtag>something</mycustomtag>");
-		assert.equal(HtmlSanitizer.SanitizeHtml("<span>something<span><span> <style></style> </span> </span></span>"), "<span>something</span>");
+		assert.equal(sanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>"), "");
+		assert.equal(sanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>", "mycustomtag"), "<mycustomtag>something</mycustomtag>");
+		assert.equal(sanitizer.SanitizeHtml("<span>something<span><span> <style></style> </span> </span></span>"), "<span>something</span>");
+
+        sanitizer.tagWhitelist.MYCUSTOMTAG = true;
+		assert.equal(sanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>"), "<mycustomtag>something</mycustomtag>");
+        sanitizer.tagWhitelist.MYCUSTOMTAG = false;
+		assert.equal(sanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>"), "");
 		
-		HtmlSanitizer.AllowedTags["MYCUSTOMTAG"] = true;
-		assert.equal(HtmlSanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>"), "<mycustomtag>something</mycustomtag>");
-		delete HtmlSanitizer.AllowedTags["MYCUSTOMTAG"];
-		assert.equal(HtmlSanitizer.SanitizeHtml("<mycustomtag>something</mycustomtag>"), "");
-		
-		assert.equal(HtmlSanitizer.SanitizeHtml("<form>something</form>"), "<div>something</div>");
-		assert.equal(HtmlSanitizer.SanitizeHtml("<input type=checkbox>"), "");
-		assert.equal(HtmlSanitizer.SanitizeHtml("<input type=checkbox>", "input[type=checkbox]"), "<input type=\"checkbox\">");
+		assert.equal(sanitizer.SanitizeHtml("<form>something</form>"), "<div>something</div>");
+		assert.equal(sanitizer.SanitizeHtml("<input type=checkbox>"), "");
+		assert.equal(sanitizer.SanitizeHtml("<input type=checkbox>", "input[type=checkbox]"), "<input type=\"checkbox\">");
     });
     </script>
     </body>

@@ -1,24 +1,29 @@
 {
-  "name": "@jitbit/htmlsanitizer",
-  "version": "2.0.3",
-  "description": "Client-side (browser-based) HTML sanitizer for front end",
-  "main": "HtmlSanitizer.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jitbit/HtmlSanitizer.git"
-  },
-  "keywords": [
-    "html",
-    "sanitize",
-    "sanitizer"
-  ],
-  "author": "Alex Yumashev <jitbit@jitbit.com> (https://www.jitbit.com/alexblog/about/)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jitbit/HtmlSanitizer/issues"
-  },
-  "homepage": "https://github.com/jitbit/HtmlSanitizer#readme"
+	"name": "@atulin/htmlsanitizer",
+	"version": "3.0.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/atulin/HtmlSanitizer.git"
+	},
+	"exports": ["./dist/index.js"],
+	"types": "./dist/index.d.ts",
+	"type": "module",
+	"bugs": {
+		"url": "https://github.com/atulin/HtmlSanitizer/issues"
+	},
+	"description": "Client-side (browser-based) HTML sanitizer for front end",
+	"homepage": "https://github.com/atulin/HtmlSanitizer#readme",
+	"keywords": ["html", "sanitize", "sanitizer"],
+	"license": "MIT",
+	"scripts": {
+		"build": "bun run ./build.ts"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/bun": "^1.2.10",
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"bun-plugin-isolated-decl": "^0.2.0"
+	}
 }

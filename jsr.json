@@ -1,0 +1,6 @@
+﻿{
+	"name": "@atulin/html-sanitizer",
+	"version": "3.0.0",
+	"license": "MIT",
+	"exports": "./src/HtmlSanitizer.ts"
+}

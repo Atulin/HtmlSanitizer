@@ -1,0 +1,19 @@
+﻿{
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM"],
+		"module": "NodeNext",
+		"target": "esnext",
+		"moduleResolution": "NodeNext",
+		"moduleDetection": "force",
+		"strict": true,
+		"downlevelIteration": true,
+		"skipLibCheck": true,
+		"declaration": true,
+		"jsx": "react-jsx",
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"allowJs": true,
+		"types": ["bun-types"]
+	},
+	"include": ["src/**/*"]
+}
